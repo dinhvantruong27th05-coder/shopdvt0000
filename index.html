@@ -1,177 +1,346 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title> Shop Văn Tới </title>
-<meta name="theme-color" content="#000000" />
-<meta name="description" content="LinkBio" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E" />
-<style>
-:root{
-  --bg:#02030A; --fg:#e6ffff; --cyan:#00ffff; --vio:#8a2be2;
-  --glow:0 0 25px rgba(0,255,255,.45),0 0 60px rgba(138,43,226,.25);
-  --card-bg:rgba(2,8,20,.48);
-}
-html,body{
-  height:100%; margin:0; background:var(--bg); color:var(--fg);
-  font-family:system-ui,Segoe UI,Inter,Roboto,Arial,sans-serif;
-  overflow: auto; /* cho phép cuộn trang */
-}
-.wrap{position:relative; z-index:2; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px}
-.shell{width:100%; max-width:1100px; display:grid; grid-template-columns:1.1fr .9fr; gap:26px}
-@media (max-width:900px){ .shell{grid-template-columns:1fr; gap:20px} }
-
-.panel{padding:22px; border-radius:18px; background:var(--card-bg); backdrop-filter:saturate(150%) blur(12px); box-shadow:var(--glow); transition:.3s}
-.panel:hover{box-shadow:0 0 50px var(--cyan),0 0 100px var(--vio); transform:scale(1.02)}
-
-.head{display:flex; align-items:center; gap:16px}
-.avatar{position:relative; width:96px; height:96px; border-radius:50%; overflow:hidden; border:2px solid var(--cyan); box-shadow:var(--glow); cursor:pointer; transition:.3s}
-.avatar::after{content:""; position:absolute; inset:-6px; border-radius:50%;
-  background:conic-gradient(from 0deg, rgba(0,255,255,.25), rgba(138,43,226,.25), rgba(0,255,255,.25));
-  filter:blur(14px); z-index:-1; animation:halo 6s linear infinite}
-@keyframes halo{to{transform:rotate(360deg)}}
-.avatar:hover{box-shadow:0 0 60px var(--cyan),0 0 100px var(--vio); transform:scale(1.08)}
-.avatar img{width:100%; height:100%; object-fit:cover}
-.online{position:absolute; right:6px; bottom:6px; width:12px; height:12px; border-radius:50%; background:linear-gradient(135deg,var(--cyan),var(--vio)); box-shadow:0 0 10px var(--cyan)}
-
-.title h1{margin:0; font-size:1.6rem; letter-spacing:.3px; color:var(--cyan); text-shadow:0 0 14px currentColor; display:flex; align-items:center; gap:8px}
-.badge-verify{display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px}
-.badge-verify svg{display:block}
-
-.sub{color:#bfefff; opacity:.9}
-.badges{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 6px}
-.badge{font-size:.9rem; padding:6px 10px; border-radius:10px; background:rgba(0,0,0,.25); border:1px solid rgba(0,255,255,.35); color:var(--fg)} /* Email & phone cùng màu */
-.badge a{color:inherit; text-decoration:none} /* Email không xanh */
-.bio{margin:12px 0 16px; color:#dfffff}
-
-.actions{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
-.btn{padding:12px 10px; border-radius:12px; border:1.6px solid var(--cyan); background:transparent; color:var(--cyan); font-weight:700; cursor:pointer; transition:.25s transform,color,box-shadow; text-align:center}
-.btn:hover{transform:translateY(-2px); background:radial-gradient(120% 120% at 50% 10%, rgba(0,255,255,.22), rgba(138,43,226,.22)); box-shadow:var(--glow); color:#001217}
-
-.section{margin:4px 0 12px; color:var(--cyan); font-weight:800; text-shadow:0 0 10px var(--cyan); position:relative}
-.section::after{content:""; position:absolute; left:0; bottom:-6px; width:72px; height:3px; background:linear-gradient(90deg,var(--cyan),var(--vio)); border-radius:2px}
-.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-@media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:520px){ .grid{grid-template-columns:1fr} }
-.tile{display:flex; justify-content:center; align-items:center; gap:8px; padding:14px 12px; border-radius:14px; text-decoration:none; color:var(--fg); background:rgba(0,0,0,.35); border:1px solid rgba(0,255,255,.25); transition:.25s all}
-.tile:hover{background:radial-gradient(circle at center, rgba(0,255,255,.25), rgba(138,43,226,.2)); box-shadow:var(--glow); transform:scale(1.05)}
-.footer{text-align:center; margin-top:18px; color:#bfefff}
-
-.toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--cyan),var(--vio)); color:#001217; padding:10px 16px; border-radius:12px; font-weight:800; display:none; z-index:5; box-shadow:var(--glow)}
-
-#galaxy{position:fixed; top:0; left:0; width:100%; height:100%; z-index:0}
-
-/* Keyboard focus */
-:focus-visible{outline:2px dashed var(--cyan); outline-offset:4px} 
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion:reduce){
-  .panel:hover,.avatar:hover{transform:none}
-  .avatar::after{animation:none}
-}
-</style>
+chtml lang="en"> <head>
+‹meta charset="UTF-8">
+‹meta name="viewport"
+content="width=device-width, initial-
+scale=1.0">
+<title>HBD</title>
+‹link rel="stylesheet" href="style.css">
 </head>
-<body>
-<canvas id="galaxy" aria-hidden="true"></canvas>
-<div class="wrap">
-  <div class="shell">
-    <!-- Hồ sơ -->
-    <section class="panel" aria-label="Hồ sơ">
-      <div class="head">
-        <div class="avatar" id="avatar" title="Nhấn để thả tim">
-          <img src="https://i.imgur.com/47vUskT.jpeg" alt="Avatar" loading="lazy" />
-          <span class="online" aria-hidden="true"></span>
-        </div>
-        <div class="title">
-          <h1>Văn Tới
-            <span class="badge-verify" title="Verified">
-              <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M12 2l2.3 1.3 2.6-.1 1.7 2 .1 2.6L20 10l1.7 2.2-.1 2.6-1.7 2-2.6-.1L12 22l-2.3-1.3-2.6.1-1.7-2-.1-2.6L4 12l-1.7-2.2.1-2.6 1.7-2 2.6.1L12 2z" fill="url(#g)"/>
-                <path d="M10.2 13.3l-2-2 1.4-1.4 1.3 1.3 3.5-3.5 1.4 1.4-4.9 5.2z" fill="#001217"/>
-                <defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#00ffff"/><stop offset="1" stop-color="#8a2be2"/></linearGradient></defs>
-              </svg>
-            </span>
-          </h1>
-          <div class="sub">Coder • Reverse Eng • 0xSec</div>
-        </div>
-      </div>
-      <!-- Badges tách riêng, email cùng màu fg -->
-      <div class="badges">
-        <span class="badge">Việt Nam </span>
-        <span class="badge">☎ 0877177483</span>
-        <span class="badge">✉ doanvantoi23022004@gmail.com</span>
-      </div>
-      <p class="bio">  Súp Pọt 24/24 Ở TẤT CẢ THÔNG TIN LIÊN HỆ Ở DƯỚI   💕</p>
-      <div class="actions">
- <a class="tile" href="https://www.facebook.com/dvt.gdv.69" target="_blank" rel="noopener">📘 <strong>Liên Hệ </strong></a>
-        <button class="btn" id="toggleMusicBtn" aria-pressed="true">🔊 Tắt nhạc</button>
-      </div>
-    </section>
-
-     <!-- Liên kết & mạng xã hội -->
-    <section class="panel" aria-label="Liên kết & mạng xã hội">
-      <div class="section">Tài Nguyên </div>
-       <a class="tile" href="https://www.facebook.com/share/g/16oZgw4xd2/?mibextid=wwXIfr" target="_blank" rel="noopener">📘 <strong>GR Mua Bán Acc Ff</strong></a>
-       <a class="tile" href="https://www.facebook.com/share/v/1EnPS16VC2/?mibextid=wwXIfr" target="_blank" rel="noopener">📘 <strong>TuT Check UY TÍN </strong></a>
-     <a class="tile" href="https://anotepad.com/notes/md8icp5f" target="_blank" rel="noopener">📘 <strong>Bán Các Loại TuT FB </strong></a>
-      <div class="grid">
-      </div>
-      <div class="section">Thông tin  </div>
-      <div class="grid">
-        <a class="tile" href="https://www.facebook.com/dvt.gdv.69" target="_blank" rel="noopener">📘 <strong>Facebook</strong></a>
-          <a class="tile" href="http://zalo.me/0877177483" target="_blank" rel="noopener">📘 <strong>Zalo</strong></a>
-      </div>
-      <div class="footer">© 2025 • Shop Văn Tới | BIO LINK </div>
-    </section>
-  </div>
+‹body>
+‹div class="card">
+<div class="back"></div>
+‹div class="front">
+‹div class="hover-text">Hover To Open</div>
+‹div class="cover-shape-large">
+‹div class="shape-diamond"></div>
+‹div class="shape-block"></div>
 </div>
-
-<div class="toast" id="toast">Đã copy!</div>
-
-<audio id="backgroundAudio" loop preload="auto" style="display:none">
-  <source src="https://pomf2.lain.la/f/l5nv41b6.mp3" type="audio/mpeg" />
-</audio>
-
-<script>
-// Music toggle
-const audio=document.getElementById('backgroundAudio');
-const btn=document.getElementById('toggleMusicBtn');
-(async()=>{try{await audio.play();}catch{btn.textContent='🔈 Bật nhạc';}})();
-btn.addEventListener('click',async()=>{ if(audio.paused){await audio.play(); btn.textContent='🔊 Tắt nhạc';} else { audio.pause(); btn.textContent='🔈 Bật nhạc'; }});
-
-// Toast + copy
-const toast=document.getElementById('toast');
-function showToast(text){ toast.textContent=text; toast.style.display='block'; clearTimeout(showToast.t); showToast.t=setTimeout(()=>toast.style.display='none',1500); }
-function safeCopy(t){ if(navigator.clipboard?.writeText){navigator.clipboard.writeText(t).then(()=>showToast('Đã copy!'));} else { const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Đã copy!'); }}
-document.getElementById('copyMail')?.addEventListener('click',(e)=>{e.preventDefault(); safeCopy('0927419817')});
-document.getElementById('copyPhone')?.addEventListener('click',(e)=>{e.preventDefault(); safeCopy('dinhvantruong27th05@gmail.com')});
-
-// Avatar click hearts
-const avatar=document.getElementById('avatar');
-avatar.addEventListener('click',(e)=>{for(let i=0;i<7;i++) spawnHeart(e.offsetX??48, e.offsetY??48);});
-function spawnHeart(x,y){
-  const el=document.createElement('div'); el.textContent='💖'; el.style.position='absolute'; el.style.left=x+'px'; el.style.top=y+'px'; el.style.pointerEvents='none';
-  const fs=14+Math.random()*12; el.style.fontSize=fs+'px'; el.style.opacity=1;
-  const dx=(Math.random()-.5)*60, dy=-(30+Math.random()*60); const rot=(Math.random()-.5)*60;
-  avatar.appendChild(el); const t0=performance.now();
-  function step(t){ const k=Math.min(1,(t-t0)/900); el.style.transform=`translate(${dx*k}px, ${dy*k}px) rotate(${rot*k}deg)`; el.style.opacity=(1-k).toFixed(2); if(k<1) requestAnimationFrame(step); else el.remove(); }
-  requestAnimationFrame(step);
+‹div class="cover-shape-small">
+‹div class="shape-diamond"></div>
+<div class="shape-block">
+‹div class="cake">
+‹div class="layer layer-bottom"></div> <div class="layer layer-middle"></div> <div class="layer layer-top"></div>
+‹div class="icing"></div›
+‹div class="drip dripl"></div> ‹div class="drip drip2"></div›
+‹div class="drip drip3"></div›
+<div class="candle"›
+‹div class="flame"></div>
+</div>
+</div>
+‹/div›
+</div>
+</div>
++
+5.491
+<div class="text-container">
+<p id="head">Happy Birthday Bestie!</p>
+‹div>Your first digital birthday card! <br> Developed
+You.</div>
+<p>Enjoy and Have It A Blast! *</p> </div> </div> </body> </html>
+@import url(https://fonts.googleapis.com/css?
+family=Nobile:400italic,700italic);
+: root {
+-border-color: #f9f9f9;
+--vanilla: #FF69B4;
+--chocolate: #9B59B6;
+html, body t
+overflow: hidden;
+background-color: #FF6B6B; width: 100%; height: 100%; display: flex;
+justify-content: center; align-items: center;
 }
-
-// Galaxy background
-const cvs=document.getElementById('galaxy'), ctx=cvs.getContext('2d');
-let W,H,stars=[],meteors=[]; function size(){W=cvs.width=innerWidth; H=cvs.height=innerHeight}
-function makeStars(n){stars=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,v:Math.random()*0.25+0.08}))}
-function draw(){ctx.clearRect(0,0,W,H);
-  const grd=ctx.createRadialGradient(W*.7,H*.3,0,W*.7,H*.3,Math.max(W,H)*.8); grd.addColorStop(0,'rgba(0,255,255,.06)'); grd.addColorStop(1,'transparent'); ctx.fillStyle=grd; ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#fff'; for(const s of stars){ s.y+=s.v; if(s.y>H){s.y=0; s.x=Math.random()*W} ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill(); }
-  ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--cyan'); ctx.lineWidth=1.6;
-  for(let i=meteors.length;i--;){ const m=meteors[i]; ctx.beginPath(); ctx.moveTo(m.x,m.y); ctx.lineTo(m.x-m.l*.6,m.y+m.l); ctx.stroke(); m.x+=m.v*.35; m.y+=m.v; if(m.y>H) meteors.splice(i,1); }
-  if(Math.random()<0.015) meteors.push({x:Math.random()*W,y:0,l:Math.random()*90+40,v:Math.random()*4+5});
-  requestAnimationFrame(draw);
+•card {
+position: relative;
+width: 390px; height: 550px;
+border: 10px solid var(--border-color);
+margin: 0;
+box-shadow: inset 10px 0px 15px 0px rgba(0,0,0,0.1); background-color: rgb(230, 190, 250);
 }
-addEventListener('resize',()=>{size(); makeStars(280)}); size(); makeStars(280); draw();
-</script>
-</body>
-</html
+•card
+-text-container {
+width: 80%; height: 80%; margin: auto; display: flex;
+flex-direction: column; justify-content: center;
+}
+•card .text-container #head {
+'Nobile', sans-serif;
+font-size: 2.5em; margin: 20px auto
+30px auto;
+background: linear-gradient(135deg, #ed0d7d, #E74C3C, #210404, #d14119, #е33606);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent; background-clip: text;
+}
+•card .text-container › div { text-align: center; font-family: 'Nobile';
+color: #580803; font-style: italic; font-size: 1.4em;
+line-height: 1.6;
+}
+•card p 1
+font-size: 1.4em;
+Line-height: 1.6; font-family: 'Nobile'; color: #580803; font-style: italic; text-align: center;
+margin: 20px auto Opx auto;
+}
+•card .front {
+position: absolute;
+width: 100%;
+height: 100%;
+-10px 0px 0px -10px;
+border: 10px solid var (--border-color); backface-visibility: hidden; background-color: rgb(207, 45, 240); background-size: contain; transform-style: preserve-3d; transform-origin: 0% 50%; transform: perspective (800px) rotateY(0deg);
+transition: all 0.8s ease-in-out;
+｝
+- hover-text {
+position: absolute;
+top: 20px; left: 50%;
+transform: translate(-50%) ; font-family:
+'Nobile', sans-serif;
+font-size: 24px; color: rgb(255,
+255, 255);
+text-shadow: 2px 2px 3px rgba (194, 231, 29, 0.5) ; z-index: 10;
+｝
+•card: hover .front {
+transform: perspective(800px) rotateY(-170deg); background-color: rgb(255, 130, 130);
+｝
+•card: hover .back {
+transform: perspective (800px) rotateY(-170deg) ;
+box-shadow: 7px 0px 5px 0px rgba(0,0,0,0.3), inset 2px 0px 15px
+0px rgba(0,0,0,0.1);
+background-color: rgb(230, 190, 250);
+｝
+,card .back {
+position: absolute;
+width: 100%;
+height: 100%;
+border: 10px solid var (--border-color); margin: -10px 0px 0px -10px;
+backface-visibility: visible;
+filter: drop-shadow(2px 2px 4px rgba (0,0,0, -5)) ; transform-style: preserve-3d; transform-origin: 0% 50%; transform: perspective(800px) rotateY(0deg);
+transition: all 0.8s ease-in-out; background-color: rgb(230, 190, 250); box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.1);
+｝
+•cover-shape-large { position: absolute;
+width: 55%；
+height: 40%;
+top: 28%; left: 23%;
+}
+•cover-shape-large .shape-block, .cover-shape-large .shape-diamond { background-color: #FF69B4;
+}
+-cover-shape-small {
+position:
+absolute;
+width:
+40%;
+height: 28%;
+top: 35%; left: 30%;
+}
+•shape-block { position: absolute;
+width: 100%; height: 100%;
+background-color: white; border-radius: 50px;
+box-shadow: 0 0 20px 0 rgba (0,0,0,0.5); display: flex; flex-direction:
+column;
+justify-content: center; align-items: center; overflow: hidden;
+5.491
+}
+•shape-diamond { position: absolute;
+width: 100%; height: 100%;
+background-color: white;
+box-shadow: 0 0 10px 0 rgba (0,0,0,0.5); transform: rotateZ(45deg) :
+27
+}
+•cake {
+position: absolute;
+width: 100px; height: 80px;
+top: 50%;
+Left: 50%;
+margin-top: -28px; margin-left:
+-50px;
+｝
+.cake
+>*｛
+position: absolute;
+}
+•layer {
+position: absolute;
+display: block; width: 100px; height: 40px; border-radius: 50%;
+background-color: var(--chocolate); box-shadow:
+0 2рх Орх #5а4520,
+0 4px 0px #43c1c,
+0
+6px 0px #423318,
+0
+8px 0px #362a14,
+0
+10px 0px #2a2110, 12px 0px #le180c,
+0 14px 0px #120f08, 0 16px 0px #060604;
+}
+layer-top { top: 0px; } Layer-bottom top: 13.4x;
+,icing {
+top: 0.8px; left: 2px;
+background-color: var(-vanilla);
+width: 96px; height: 36px; border-radius: 50%; position: absolute;
+｝
+icing:: before {
+content:
+"";
+position: absolute;
+top: 4px; right: 5px; bottom: 6px;
+left: 5px;
+background-color: #f58d6; box-shadow:
+0 0 4px #f7ebde,
+0 0 4px #f7ebde,
+0 0 4px #f7ebde;
+border-radius: 50%;
+｝
+•drip { display: block; width: 20px; height: 24px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; background-color: var(—-vanilla);
+position: absolute;
+}
+-dripl 1
+top: 22px; left: 2px;
+transform: skewY (15deg) ;
+height: 19.2px; width: 16px;
+}
+•drip2 {
+top:
+30px;
+left: 72.4px;
+transform: skewY (-15deg) ;
+｝
+•drip3 {
+top: 33.6px; left: 36px; width: 32px; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
+}
+• candle {
+background-color: #9B59B6; width: 6.4px;
+height: 20px; border-radius:
+8px / 4px;
+top: -8px;
+Left: 50%; margin-left:
+-3.2px;
+position: absolute;
+｝
+-candle:: before {
+content:
+costtton:s absolute:
+top:
+0;
+left: 0;
+width: 6.4px;
+height: 3.2px; border-radius:
+50%;
+background-color: #FFA500;
+｝
+•flame { position: absolute;
+background-color: #FF6B35;
+width: 6px; height: 14px;
+border-radius: 10px 10px 10px 10px / 25px 25px 10px 10px; top: -13.6px;
+Left: 50%;
+margin-left: -3px; box-shadow:
+0 0 10px rgba(255, 107,
+53, 0.5),
+0 0 20px rgba (255,
+107,
+53, 0.5),
+0 0 60px rgba (255, 107,
+53,
+0.5),
+0 0 80px rgba (255,
+107, 53, 0.5);
+transform-origin: 50% 90%;
+animation: flicker 1s ease-in-out infinite;
+}
+@keyframes flicker {
+0% {
+box-shadow:
+0 10px
+rgba(255, 165,
+0,
+• • 20px rgba (255, 165;
+0,
+0.2),
+0,
+0.2),
+0.2),
+80px rgba(255, 165,
+0,
+0.2)
+}
+25% {
+box-shadow:
+0
+0
+0
+10px rgba(255, 165,
+0
+20px rgba(255, 165,
+0
+0
+60px rgba(255, 165,
+0
+0
+80px rgba(255, 165,
+0,
+0,
+0.5),
+0.5),
+0,
+0.5),
+0.5)
+｝
+50% {
+box-shadow:
+0
+0
+0
+10px
+rgba (255, 165,
+0,
+0.3),
+0
+20px
+rgba(255, 165,
+0.3),
+0
+60px rgba (255, 165,
+0,
+0,
+0
+80px rgba (255, 165,
+0,
+0.3),
+0.3)
+｝
+75% {
+box-shadow:
+0
+0 10px
+rgba(255, 165,
+0
+0
+0.4),
+0.4),
+0.4),
+80px rgba(255, 165, 0,
+0.4)
+}
+100% {
+box-shadow:
+0 0 10px
+rgba(255, 165,
+0,
+0.5),
+: • 20px reba (255; 165;
+0,
+0.5),
+0 0 60px
+0,
+0.5),
+0 0 80px rgba (255, 165, 0, 0.5)
+    }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
